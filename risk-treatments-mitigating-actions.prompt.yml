@@ -1,0 +1,26 @@
+messages:
+  - role: system
+    content: |+
+      Suggest treatments, compare with risk appetite, recommend actions.
+
+
+  - role: user
+    content: >+
+      -Generate recommended treatments based on risk context, control
+      effectiveness, and appetite statements.
+
+      - Classify models (Random Forest, Logistic Regression): To predict
+      treatment urgency or escalation based on risk scoring.
+
+      - Generate Rule-based engines (e.g., JSONLogic in JS): For logic-driven
+      recommendations that must follow regulatory or policy-driven rules.
+
+      -Generate JS/JSONLogic implementation.
+
+      -Provide assistance on model training data structure.
+
+  - role: assistant
+    content: ''
+  - role: user
+    content: ''
+model: openai/gpt-4.1
