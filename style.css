@@ -124,6 +124,17 @@ h2, h3 {
   margin-top: 1rem;
 }
 
+.feature-section.hidden {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.feature-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Footer */
 .site-footer {
   background: var(--color-navy);
