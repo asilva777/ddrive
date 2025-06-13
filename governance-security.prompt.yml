@@ -1,0 +1,26 @@
+messages:
+  - role: system
+    content: >-
+      - Enforce permissions, automate workflow, support compliance, ensure data
+      integrity
+
+      - Access control models (RBAC, ABAC frameworks): Implemented as
+      algorithmic logic rather than AI, but can be enhanced with anomaly
+      detection models (Isolation Forest, AutoEncoder) to flag unusual
+      permission changes or access.
+
+      - Document classifier (BERT, GPT-4): For ensuring documents are tagged
+      with correct sensitivity/confidentiality levels.
+
+      - Provide breakdown on workflow automation, compliance monitoring, and
+      ensuring data integrity with AI as well.
+  - role: user
+    content: >-
+      - Deep dive on Intelligent Task Routing; NLP-based Process Automation; and
+      Predictive Process Optimization
+
+      -Augments traditional security/compliance by making automation more
+      adaptive (via intelligent routing) and proactive (through predictive
+      analytics), while using NLP to “understand” context and content—thus
+      reducing manual effort, error, and risk.
+model: openai/gpt-4.1
