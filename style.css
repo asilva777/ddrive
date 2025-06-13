@@ -1,3 +1,37 @@
+/* Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link styles for accessibility */
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 100;
+  background: #fff;
+  color: #007B8F;
+  padding: 0.5em 1em;
+  border-radius: 4px;
+}
+.skip-link:focus {
+  left: 1em;
+  top: 1em;
+  width: auto;
+  height: auto;
+  outline: 2px solid #007B8F;
+}
 /* Base Reset */
 *,
 *::before,
