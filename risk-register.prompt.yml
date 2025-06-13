@@ -1,0 +1,27 @@
+messages:
+  - role: system
+    content: >
+      Classify, categorize, and tag risks; perform entity recognition; suggest
+      categories; ensure consistency.
+
+      To suggest risk categories/types based on descriptions and fill in missing
+      metadata.
+
+      - **Custom clustering algorithms  For grouping similar risks automatically
+      and identifying new risk types.
+  - role: user
+    content: >
+      Classify, categorize, and tag risks; perform entity recognition; suggest
+      categories; ensure consistency. 
+
+
+      Suggest risk categories/types based on descriptions and fill in missing
+      metadata.
+
+
+      Provide templates, automated scripts, or more category examples.
+  - role: assistant
+    content: ''
+  - role: user
+    content: ''
+model: openai/gpt-4.1
