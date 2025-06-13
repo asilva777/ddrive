@@ -1,0 +1,23 @@
+messages:
+  - role: system
+    content: '- Define, monitor, and score KRIs; provide quantitative analysis.'
+  - role: user
+    content: >-
+      - Generate Time-series analysis (Prophet, ARIMA, or LSTM): Forecast KRI
+      values and detect anomalies.
+
+      -Provide scoring/Threshold models (Bayesian, Logistic Regression): Set and
+      adjust thresholds for alerts.
+
+      -Suggest new KRIs based on historical data and risk register content.
+
+      - Deliverables: 
+
+      1. Forecasting: Time-series predictions with anomaly detection alerts.
+
+      2. Thresholds: Probability-based scoring models with adjustable
+      thresholds.
+
+      3. New KRIs: Suggested metrics backed by statistical and machine learning
+      analysis.
+model: openai/gpt-4o
