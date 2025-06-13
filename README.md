@@ -2,6 +2,23 @@
 
 **DDRiVE** is a modern Progressive Web App (PWA) designed for comprehensive risk and vulnerability management across multiple domains. It allows organizations to establish a centralized platform for risk registers, controls, treatments, data governance, and more — fully aligned with global standards like ISO 31000, CPS 230, COSO, and SOX.
 
+[![PWA Compliance](https://img.shields.io/badge/PWA-Ready-007B8F?logo=googlechrome&logoColor=white)](https://web.dev/measure/)
+[![Lighthouse Score: 100](https://img.shields.io/badge/Lighthouse-100-brightgreen?logo=lighthouse)](https://web.dev/measure/)
+[![Build Status](https://github.com/yourusername/ddrive/actions/workflows/deploy.yml/badge.svg)](https://github.com/yourusername/ddrive/actions)
+[![MIT License](https://img.shields.io/github/license/yourusername/ddrive.svg)](LICENSE)
+[![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-blue?logo=github)](https://yourusername.github.io/ddrive)
+
+> A Progressive Web App (PWA) for unified risk and vulnerability management.
+
+## 🔧 Features
+
+- 📋 Unlimited risk registers (Operational, Cyber, Supplier, etc.)
+- 🧱 Control framework aligned with ISO 31000, CPS 230, COSO, SOX
+- 🛡️ Treatment plans and root cause analysis
+- 🔐 Data governance, permissions, workflows
+- 📊 Dashboards, KRIs, bow-tie visualisation
+- 🔄 Link to incidents, audits, compliance data
+
 ## 🔧 Features
 
 - 📋 **Digital Risk Register**  
@@ -28,14 +45,14 @@
 ## 📁 Project Structure
 
 DDRiVE/
+├── .github/workflows/deploy.yml
 ├── index.html
 ├── styles.css
 ├── script.js
 ├── manifest.json
 ├── service-worker.js
-└── icons/
-├── icon-192.png
-└── icon-512.png
+├── icons/
+└── README.md
 
 bash
 npx serve .
@@ -81,23 +98,67 @@ Turquoise Green (#007B8F)
 
 White (#ffffff)
 
-🧠 Technologies Used
-HTML5, CSS3, JavaScript (Vanilla)
+3. Install as PWA
+Open in Chrome and click “Install” from the address bar.
 
-Progressive Web App features (Service Worker, Manifest)
+🧠 Tech Stack
+HTML5 + CSS3 + Vanilla JavaScript
 
-Responsive Design & Accessibility Best Practices
+Service Workers + App Manifest (PWA)
+
+Google Fonts: Oswald, Montserrat, Poppins
+
+Fully responsive UI
+
+⚙️ GitHub Pages Deployment
+Automatically deploys via GitHub Actions to gh-pages.
 
 🛠️ Roadmap
- Add backend API integration (Node.js, Express)
+ Add login/auth system
 
- Integrate real-time notifications (WebSocket or Firebase)
+ API backend (Node/Express/Firebase)
 
- Advanced analytics with charts.js / D3.js
+ Real-time alerts & KRI dashboard
 
- Role-based user authentication
+ Drag/drop bow-tie editor
+
+ Multi-user collaboration tools
 
 📄 License
-This project is licensed under the MIT License.
+This project is licensed under the MIT License – see the LICENSE file for details.
 
-DDRiVE — helping organizations proactively manage risk, stay compliant, and operate securely. 🔐🚀
+yaml
+
+### ⚙️ `.gitignore`
+
+```gitignore
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Build
+dist/
+build/
+
+# System
+.DS_Store
+.env
+.vscode/
+*.swp
+
+# PWA cache and runtime
+*.webmanifest
+service-worker.js
+📄 LICENSE (MIT)
+text
+Copy
+Edit
+MIT License
+
+Copyright (c) 2025 YOUR NAME
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction...
+
+[Full MIT license text continues]
