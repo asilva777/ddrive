@@ -1,193 +1,359 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <meta property="og:url" content="https://github.com/asilva777/DDRiVE/">
-<meta property="og:image" content="https://github.com/asilva777/DDRiVE/blob/main/og-image.png">
-
-  <!-- SEO: Title and Description -->
-  <title>DDRiVE – Risk Management & Compliance Platform</title>
-  <meta name="description" content="DDRiVE – Data Driven Risk and Vulnerability Evaluation and Management Platform for operational, IT, cyber, supplier, and environmental risk." />
-  <meta name="keywords" content="Risk Management, Compliance, Cybersecurity, Data Governance, Vulnerability, GRC, DDRiVE" />
-
-  <!-- SEO: Open Graph Tags -->
-  <meta property="og:title" content="DDRiVE – Risk Management & Compliance Platform">
-  <meta property="og:description" content="One platform for data-driven risk and vulnerability evaluation, compliance, and governance.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://yourdomain.com/">
-  <meta property="og:image" content="https://yourdomain.com/og-image.png">
-
-  <!-- Manifest & Theme Color -->
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#007B8F" />
-
-  <!-- Performance: Preload Fonts and Styles -->
-  <link rel="preload" href="styles.css?v=1.0" as="style">
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Montserrat:wght@400;600&family=Poppins:wght@300;400;500&display=swap" as="style">
-
-  <!-- Fonts & Stylesheets (with cache busting) -->
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Montserrat:wght@400;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=1.0" />
-
-  <!-- Service Worker Registration (PWA) -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('service-worker.js');
-      });
-    }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDRiVE - Risk Intelligence Platform</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="icon" href="https://appimize.app/assets/apps/user_1097/images/e311bf6a692b_330_1097.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Oswald:wght@500;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <script type="importmap">
+        { 
+          "imports": { 
+            "@google/genai": "https://esm.sh/@google/genai@^0.12.0",
+            "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.43.4"
+          } 
+        }
+    </script>
 </head>
 <body>
-  <!-- Accessibility: Skip to main content link -->
-  <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div id="root">
+        <div class="app-container">
+            <main id="control-panel" role="form" aria-labelledby="control-panel-heading">
+                <header class="banner">
+                  <img src="https://appimize.app/assets/apps/user_1097/images/e311bf6a692b_330_1097.png" alt="DDRiVE logo">
+                  <div class="banner-text">
+                    <h1 id="banner-title">DDRiVE</h1>
+                    <p id="banner-subtitle">Data-Driven Risk and Vulnerability Evaluation<br>
+                    <em>Your Engine for Smarter Security, Safety and Resilient Decisions</em></p>
+                  </div>
+                  <div class="banner-actions">
+                     <button id="theme-toggle" type="button" aria-label="Switch to light theme" title="Toggle light/dark theme">
+                        <svg id="theme-icon-light" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <svg id="theme-icon-dark" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
+                   <div id="user-profile" role="button" tabindex="0" aria-label="User profile and settings" title="User profile and settings">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                       <div id="user-info" class="hidden">
+                          <span id="user-email"></span>
+                          <button id="upgrade-plan-button" class="secondary-button" title="View premium plan options">Upgrade Plan</button>
+                          <button id="restart-tour-button" class="secondary-button" title="Restart the onboarding tutorial">Restart Tour</button>
+                          <button id="logout-button" title="Log out of your account">Logout</button>
+                      </div>
+                    </div>
+                  </div>
+                </header>
 
-  <header class="site-header">
-    <div class="container header-container">
-      <h1 class="site-title">DDRiVE</h1>
-      <nav class="main-nav" aria-label="Main navigation">
-        <!-- Accessibility: Better mobile nav toggle -->
-        <button class="mobile-nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav-list">
-          <span class="sr-only">Open menu</span>
-          <span aria-hidden="true">☰</span>
+                <section id="dashboard" aria-labelledby="dashboard-heading">
+                    <h2 id="dashboard-heading" class="hidden">Dashboard</h2>
+                    <div class="stat-card" id="total-risks-card" title="Total number of unique risks identified in the latest assessment.">
+                        <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                        <div class="stat-content"><label for="total-risks-value">Total Risks</label><span id="total-risks-value">-</span></div>
+                    </div>
+                    <div class="stat-card" id="critical-alerts-card" title="Number of risks classified with 'Critical' severity.">
+                        <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
+                        <div class="stat-content"><label for="critical-alerts-value">Critical Alerts</label><span id="critical-alerts-value">-</span></div>
+                    </div>
+                    <div class="stat-card unified-score-card" id="unified-risk-score-card" title="A unified score combining digital and geospatial threat intelligence.">
+                        <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"></path></svg></div>
+                        <div class="stat-content">
+                            <label for="unified-risk-score-value">Unified Risk Score</label>
+                            <span id="unified-risk-score-value">-</span>
+                            <div class="score-breakdown">
+                                <span id="digital-score-value">Digital: -</span>
+                                <span id="geo-score-value">Geo: -</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card" id="system-status-card" title="Current operational status of the DDRiVE platform.">
+                       <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg></div>
+                        <div class="stat-content"><label for="system-status-value">System Status</label><span id="system-status-value">Operational</span></div>
+                    </div>
+                </section>
+                 
+                <div class="assessment-actions">
+                    <button id="new-assessment-button" class="secondary-button" title="Open the form to log a new manual risk assessment.">New Assessment</button>
+                </div>
+
+                <div class="input-group">
+                    <label for="file-input">AI Analysis Inputs</label>
+                    <label for="file-input" class="file-label" title="Click to select an image or video file for analysis.">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        Choose File for AI
+                        <span id="file-name">No file selected</span>
+                    </label>
+                    <input type="file" id="file-input" accept="image/*,video/*">
+                    <textarea id="prompt-input" rows="3" placeholder="e.g., Assess perimeter security for the construction site in this image..." title="Provide a detailed text prompt to guide the AI's risk assessment."></textarea>
+                    <input type="text" id="url-input" class="text-input" placeholder="Enter URL for AI Analysis (optional)">
+                     <div class="geo-grid">
+                        <input type="number" id="lat-input" class="text-input" placeholder="Latitude">
+                        <input type="number" id="lng-input" class="text-input" placeholder="Longitude">
+                        <input type="number" id="elevation-input" class="text-input" placeholder="Elevation (m)">
+                        <input type="number" id="proximity-input" class="text-input" placeholder="Proximity to Hazard (km)">
+                    </div>
+                </div>
+
+                <section id="analysis-controls" aria-labelledby="analysis-controls-heading">
+                    <h3 id="analysis-controls-heading" class="hidden">Risk Categories</h3>
+                    <div class="control-group" title="Toggle to include Physical Security risks (e.g., unlocked gates, broken fences) in the analysis.">
+                        <label for="physical-toggle">Physical Security</label>
+                        <label class="switch"><input type="checkbox" id="physical-toggle" class="risk-toggle" value="Physical Security" checked><span class="slider"></span></label>
+                    </div>
+                    <div class="control-group" title="Toggle to include Environmental risks (e.g., flood zones, fire hazards) in the analysis.">
+                        <label for="environmental-toggle">Environmental</label>
+                        <label class="switch"><input type="checkbox" id="environmental-toggle" class="risk-toggle" value="Environmental" checked><span class="slider"></span></label>
+                    </div>
+                    <div class="control-group" title="Toggle to include Operational risks (e.g., unsafe practices, lack of safety gear) in the analysis.">
+                        <label for="operational-toggle">Operational</label>
+                        <label class="switch"><input type="checkbox" id="operational-toggle" class="risk-toggle" value="Operational" checked><span class="slider"></span></label>
+                    </div>
+                    <div class="control-group" title="Toggle to include Cybersecurity risks (e.g., exposed servers, unsecured Wi-Fi) in the analysis.">
+                        <label for="cyber-toggle">Cybersecurity</label>
+                        <label class="switch"><input type="checkbox" id="cyber-toggle" class="risk-toggle" value="Cybersecurity" checked><span class="slider"></span></label>
+                    </div>
+                </section>
+                
+                <div id="limit-notification" class="hidden">
+                  <p>You have reached your free assessment limit. <button id="upgrade-from-notice-button">Upgrade to Premium</button> for unlimited assessments.</p>
+                </div>
+                <button id="assess-button" title="Start the AI risk assessment based on the provided media and prompt.">Assess Risks with AI</button>
+
+                <section id="resilience-team" aria-labelledby="resilience-team-heading">
+                    <h2 id="resilience-team-heading">Resilience Team Hub</h2>
+                    <div class="team-list">
+                        <div class="team-member"><span class="status-dot online"></span>Team Lead (Online)</div>
+                        <div class="team-member"><span class="status-dot online"></span>Security Chief (Online)</div>
+                        <div class="team-member"><span class="status-dot offline"></span>Env. Analyst (Offline)</div>
+                    </div>
+                    <textarea id="broadcast-message" rows="2" placeholder="Broadcast emergency alert..." title="Type a message to broadcast to all online team members."></textarea>
+                    <button id="broadcast-button" class="secondary-button" title="Send the message to all online team members.">Broadcast</button>
+                    <div id="emergency-contacts">
+                        <button id="contact-police" class="contact-button" title="Contact local law enforcement.">Police</button>
+                        <button id="contact-fire" class="contact-button" title="Contact the local fire department.">Fire Dept.</button>
+                        <button id="contact-security" class="contact-button" title="Contact the internal security team.">Security</button>
+                    </div>
+                </section>
+            </main>
+
+            <section id="output-panel" aria-labelledby="output-panel-heading">
+                <div id="loader" class="hidden">
+                    <div class="spinner"></div>
+                    <p>AI DDRiVER is analyzing...</p>
+                </div>
+
+                <div id="output-content">
+                    <section id="assessment-display" class="output-block" aria-labelledby="assessment-display-heading">
+                         <div class="output-block-header">
+                            <h2 id="assessment-display-heading">Assessment Display</h2>
+                        </div>
+                        <img src="#" alt="Uploaded media preview" id="image-preview" class="hidden">
+                        <p id="image-placeholder">Your uploaded image or drone footage will appear here.</p>
+                    </section>
+
+                    <div id="assessment-history-display" class="output-block hidden">
+                        <div class="risk-register-header">
+                            <h2>Risk Register (Last Assessment)</h2>
+                            <div class="header-actions">
+                                <button id="export-report-button" class="secondary-button" disabled title="Upgrade to Premium to export PDF reports.">Export Report</button>
+                                <button id="export-csv-button" class="secondary-button" disabled title="Export the detailed risks from the last assessment to a CSV file.">Export Last CSV</button>
+                            </div>
+                        </div>
+                        <div class="assessment-item-header">
+                            <span>Title</span>
+                            <span>Category</span>
+                            <span>Severity</span>
+                            <span>Status</span>
+                        </div>
+                        <div id="assessment-history-list">
+                            <p>Run an assessment to populate the history.</p>
+                        </div>
+                    </div>
+                    
+                    <section id="report-display" class="output-block" aria-labelledby="report-display-heading">
+                        <h2 id="report-display-heading">AI Generated Report</h2>
+                        <div id="assessment-result"></div>
+                    </section>
+
+                    <section id="map-display" class="output-block" aria-labelledby="map-heading">
+                        <h2 id="map-heading">Site Map</h2>
+                        <div id="map">
+                            <iframe id="embed-map" frameborder="0" style="border:0" allowfullscreen="" loading="lazy"></iframe>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </div>
+
+        <div id="onboarding-overlay" class="hidden" role="dialog" aria-modal="true" aria-labelledby="onboarding-title">
+            <div id="login-container">
+                <img class="ddrive-logo" src="https://appimize.app/assets/apps/user_1097/images/e311bf6a692b_330_1097.png" alt="DDRiVE logo and tagline for risk intelligence platform">
+                <h1 id="auth-title">DDRiVE</h1>
+                <p id="auth-text" class="tagline">Your Engine for Smarter Security, Safety and Resilient Decisions</p>
+                <div class="auth-form">
+                    <input type="email" id="email-input" placeholder="Email" required aria-label="Email">
+                    <input type="password" id="password-input" placeholder="Password" required aria-label="Password">
+                    <p id="auth-error" class="error-text hidden"></p>
+                    <p id="auth-success" class="success-text hidden"></p>
+                </div>
+                 <div class="auth-buttons">
+                    <button id="login-button">Login</button>
+                    <button id="signup-button">Sign Up</button>
+                </div>
+                <div class="auth-separator"><span>or</span></div>
+                <button id="magic-link-button" class="tertiary-button">Send Magic Link</button>
+            </div>
+
+            <div id="onboarding-tooltip" class="hidden" tabindex="-1" aria-labelledby="onboarding-title" aria-describedby="onboarding-text">
+                <div id="onboarding-tooltip-content">
+                    <h3 id="onboarding-title">Tooltip Title</h3>
+                    <p id="onboarding-text">Tooltip description text goes here.</p>
+                </div>
+
+                <div id="onboarding-progress-bar" aria-label="Tour Progress"></div>
+
+                <div class="onboarding-footer">
+                    <div class="onboarding-progress">
+                        <div class="language-selector-wrapper">
+                            <select id="language-selector" aria-label="Select language">
+                                <option value="en">English</option>
+                                <option value="fil">Filipino</option>
+                                <option value="ceb">Cebuano</option>
+                                <option value="war">Waray-Waray</option>
+                            </select>
+                        </div>
+                         <button id="onboarding-help" class="need-help-button">Need Help?</button>
+                    </div>
+                    <div class="onboarding-nav">
+                        <button id="onboarding-skip" class="secondary-button">Skip</button>
+                        <button id="onboarding-prev" class="secondary-button">Previous</button>
+                        <button id="onboarding-next">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="upgrade-modal" class="hidden">
+          <div class="upgrade-modal-content">
+              <button id="close-upgrade-modal-button" aria-label="Close">&times;</button>
+              <div id="upgrade-view-main">
+                  <h2>Upgrade to DDRiVE Premium</h2>
+                  <p>Unlock unlimited assessments, advanced reporting, and priority support.</p>
+                  <div class="plan-details">
+                      <p>Your Role: <strong id="upgrade-role-display"></strong></p>
+                      <p class="price">Price: <strong id="upgrade-price-display"></strong> / month</p>
+                  </div>
+                  <button id="checkout-button">Proceed to Checkout</button>
+                  <p class="checkout-notice">This is a simulated checkout for demonstration purposes.</p>
+              </div>
+              <div id="upgrade-view-success" class="hidden">
+                  <h2>🎉 Upgrade Successful!</h2>
+                  <p>Welcome to DDRiVE Premium. Your account has been upgraded, and all features are now unlocked.</p>
+                  <button id="close-success-modal-button" class="secondary-button">Go to Dashboard</button>
+              </div>
+          </div>
+        </div>
+
+        <button id="open-chatbot-button" class="fab hidden" aria-label="Open AI Assistant" title="Open AI DDRiVER Assistant">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
         </button>
-        <ul class="nav-links" id="main-nav-list">
-          <li><a href="#risk-register">Risk Register</a></li>
-          <li><a href="#control-framework">Control Framework</a></li>
-          <li><a href="#treatment-plans">Treatments & Actions</a></li>
-          <li><a href="#data-governance">Data Governance</a></li>
-          <li><a href="#dashboards">Dashboards</a></li>
-          <li><a href="#kris">KRIs</a></li>
-          <li><a href="#link-gcr">Link to GRC</a></li>
-        </ul>
-      </nav>
+
+        <div id="chatbot-widget" class="hidden" role="log" aria-live="polite">
+            <div id="chatbot-header">
+                <h3 id="chatbot-title">AI DDRiVER</h3>
+                <button id="close-chatbot-button" aria-label="Close Chat" title="Close Chat">&times;</button>
+            </div>
+            <div id="chatbot-messages">
+                <!-- Messages will be dynamically inserted here -->
+            </div>
+            <div id="chatbot-typing-indicator" class="hidden">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+            <form id="chatbot-input-form">
+                <input type="text" id="chatbot-input" placeholder="Ask about DDRiVE features..." autocomplete="off" required>
+                <button type="submit" id="chatbot-send-button" aria-label="Send Message" title="Send Message">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </form>
+        </div>
+
+        <!-- New Risk Assessment Form Modal -->
+        <div id="assessment-form-modal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="assessment-form-title">
+            <div class="assessment-form-content">
+                 <div class="assessment-form-header">
+                    <h2 id="assessment-form-title">New Risk Assessment</h2>
+                    <button id="close-assessment-form-button" aria-label="Close form">&times;</button>
+                </div>
+                <div id="assessment-form-loader" class="hidden">
+                    <div class="spinner"></div>
+                    <p>Submitting assessment...</p>
+                </div>
+                <form id="risk-assessment-form">
+                    <div class="form-grid">
+                        <div class="form-column">
+                            <h3>Geospatial & Digital Inputs</h3>
+                            <div class="form-group">
+                                <label for="form-url">URL</label>
+                                <input type="text" id="form-url" class="text-input" placeholder="https://example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="form-lat">Latitude</label>
+                                <input type="number" id="form-lat" class="text-input" placeholder="e.g., 40.7128">
+                            </div>
+                            <div class="form-group">
+                                <label for="form-lng">Longitude</label>
+                                <input type="number" id="form-lng" class="text-input" placeholder="e.g., -74.0060">
+                            </div>
+                            <div class="form-group">
+                                <label for="form-elevation">Elevation (m)</label>
+                                <input type="number" id="form-elevation" class="text-input" placeholder="e.g., 10">
+                            </div>
+                            <div class="form-group">
+                                <label for="form-proximity">Proximity to Hazard (km)</label>
+                                <input type="number" id="form-proximity" class="text-input" placeholder="e.g., 5.2">
+                            </div>
+                             <div class="form-group">
+                                <label for="form-file-input">Upload File</label>
+                                <label for="form-file-input" class="file-label">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                                    Choose File
+                                    <span id="form-file-name">No file selected</span>
+                                </label>
+                                <input type="file" id="form-file-input" accept="image/*,video/*,application/pdf,.doc,.docx,.txt">
+                            </div>
+                        </div>
+                        <div class="form-column">
+                            <h3>Simulated Digital Scores</h3>
+                            <div class="form-group slider-group">
+                                <label for="form-url-threat">URL Threat Level: <span id="form-url-threat-value">50</span></label>
+                                <input type="range" id="form-url-threat" min="0" max="100" value="50">
+                            </div>
+                            <div class="form-group slider-group">
+                                <label for="form-doc-sensitivity">Document Sensitivity: <span id="form-doc-sensitivity-value">50</span></label>
+                                <input type="range" id="form-doc-sensitivity" min="0" max="100" value="50">
+                            </div>
+                             <div class="form-group slider-group">
+                                <label for="form-image-anomaly">Image Anomaly Score: <span id="form-image-anomaly-value">50</span></label>
+                                <input type="range" id="form-image-anomaly" min="0" max="100" value="50">
+                            </div>
+                             <div class="form-group slider-group">
+                                <label for="form-video-incident">Video Incident Score: <span id="form-video-incident-value">50</span></label>
+                                <input type="range" id="form-video-incident" min="0" max="100" value="50">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-footer">
+                        <div class="simulated-score">
+                            <label>Simulated Risk Score</label>
+                            <span id="simulated-score-value">75</span>
+                        </div>
+                        <button type="submit" id="submit-assessment-button">Submit Assessment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </header>
-
-  <main id="main-content">
-    <section id="hero">
-      <div class="container">
-        <h2>Manage Risk. Drive Compliance. Stay Secure.</h2>
-        <p>Data‑driven operational, IT, cyber, supplier & environmental risk management – in one platform.</p>
-        <a href="#risk-register" class="btn btn-primary">Get Started</a>
-      </div>
-    </section>
-
-    <section id="risk-register" class="feature-section">
-      <div class="container">
-        <h3>Establish a Risk Register</h3>
-        <p>
-          Build a digital risk register with unlimited risk categories and types to effectively manage operational risk, cyber & IT risk, supplier risk, regulatory risk, environmental risks, and more.
-        </p>
-      </div>
-    </section>
-
-    <section id="control-framework" class="feature-section alt">
-      <div class="container">
-        <h3>Build a Comprehensive Control Framework</h3>
-        <p>
-          Enable organisations to establish a control framework in line with ISO 31000, CPS 230, COSO, and SOX requirements. Build a centralised control library, schedule controls, conduct tests, and track outcomes.
-        </p>
-      </div>
-    </section>
-
-    <section id="treatment-plans" class="feature-section">
-      <div class="container">
-        <h3>Define Risk Treatments &amp; Mitigating Actions</h3>
-        <p>
-          Set controls, manage risks continuously, compare against appetite &amp; current ratings, and determine the required treatment actions.
-        </p>
-      </div>
-    </section>
-
-    <section id="data-governance" class="feature-section alt">
-      <div class="container">
-        <h3>Data Governance &amp; Security</h3>
-        <p>
-          There’s a strict permissions hierarchy, automated workflows with approval &amp; escalation, streamlined compliance, and consistent data capture for insightful and accurate reporting.
-        </p>
-      </div>
-    </section>
-
-    <section id="dashboards" class="feature-section">
-      <div class="container">
-        <h3>Dashboards &amp; Bow‑Tie Analysis</h3>
-        <p>
-          Visualise your risk landscape using our inbuilt dashboards and bow‑tie visualisations. ‘My Quick View’ delivers personalised tasks, actions, and key metrics.
-        </p>
-      </div>
-    </section>
-
-    <section id="kris" class="feature-section alt">
-      <div class="container">
-        <h3>Key Risk Indicators (KRIs)</h3>
-        <p>
-          Define KRIs to validate and rate risks and continuously monitor risk levels with quantitative analysis techniques for improved oversight.
-        </p>
-      </div>
-    </section>
-
-    <section id="link-gcr" class="feature-section">
-      <div class="container">
-        <h3>Link Risk to Other GRC Processes</h3>
-        <p>
-          Connect incidents, audits, strategic goals, and compliance requirements to originating risks using our integrated risk management solution.
-        </p>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer: Use semantic <footer> element -->
-  <footer class="site-footer">
-    <div class="container">
-      <p>© 2025 DDRiVE – All rights reserved.</p>
-    </div>
-  </footer>
-
-  <!-- Scripts: Use defer, cache busting, and accessibility for nav -->
-  <script src="script.js?v=1.0" defer></script>
-
-  <!-- Example of lazy-loaded image for future use (none present now) -->
-  <!--
-  <img src="example.jpg" alt="Descriptive alt text" loading="lazy">
-  -->
-
-  <!-- Accessibility: Screen reader only CSS (add in your styles.css) -->
-  <!--
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0,0,0,0);
-    border: 0;
-  }
-  .skip-link {
-    position: absolute;
-    left: -999px;
-    top: auto;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    z-index: 100;
-    background: #fff;
-    color: #007B8F;
-    padding: 0.5em 1em;
-    border-radius: 4px;
-  }
-  .skip-link:focus {
-    left: 1em;
-    top: 1em;
-    width: auto;
-    height: auto;
-    outline: 2px solid #007B8F;
-  }
-  -->
-
+    <script type="module" src="index.tsx"></script>
 </body>
 </html>
