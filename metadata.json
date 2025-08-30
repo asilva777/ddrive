@@ -1,0 +1,6 @@
+{
+  "name": "DDRiVE",
+  "description": "DDRiVE (Data-Driven Risk and Vulnerability Evaluation): Your Engine for Smarter Security, Safety and Resilient Decisions. An AI-powered platform to assess hazard and security risks using drone imagery, photos, and text.",
+  "theme_color": "#0077C8",
+  "requestFramePermissions": []
+}
