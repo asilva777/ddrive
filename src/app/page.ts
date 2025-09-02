@@ -333,6 +333,39 @@ export function updateFeatureAccess() {
     upgradePlanButton.textContent = is_premium ? 'Manage Plan' : 'Upgrade Plan';
 }
 
+// FIX: Create a dedicated event handler for status changes to match the expected signature.
+async function onStatusChangeEvent(e: Event) {
+    const select = e.target as HTMLSelectElement;
+    const riskId = select.dataset.riskId;
+    const newStatus = select.value;
+    if (!riskId) return;
+
+    const originalRisk = state.currentRisks.find(r => r.risk_id === riskId);
+    if (!originalRisk) return;
+    const originalStatus = originalRisk.status || 'Open';
+    const originalRisks = [...state.currentRisks]; // backup for reversion
+
+    // Optimistic update
+    const updatedRisks = state.currentRisks.map(r => r.risk_id === riskId ? { ...r, status: newStatus } : r);
+    state.currentRisks = updatedRisks;
+    renderRiskRegister(updatedRisks);
+
+    const success = await handleStatusChange(riskId, newStatus);
+    if (success) {
+        showUndoToast(`Status for "${originalRisk.title}" updated to ${newStatus}.`, async () => {
+            const undoSuccess = await handleStatusChange(riskId, originalStatus);
+            if (undoSuccess) {
+                const undoneRisks = state.currentRisks.map(r => r.risk_id === riskId ? { ...r, status: originalStatus } : r);
+                state.currentRisks = undoneRisks;
+                renderRiskRegister(undoneRisks);
+            }
+        });
+    } else {
+        alert('Failed to update status.');
+        state.currentRisks = originalRisks;
+        renderRiskRegister(originalRisks);
+    }
+}
 
 export function renderRiskRegister(risks: Risk[]) {
   assessmentHistoryList.innerHTML = '';
@@ -369,7 +402,8 @@ export function renderRiskRegister(risks: Risk[]) {
   
   if (canEditStatus) {
       document.querySelectorAll('.status-select').forEach(select => {
-        select.addEventListener('change', handleStatusChange);
+        // FIX: Use the new event handler with the correct signature.
+        select.addEventListener('change', onStatusChangeEvent);
       });
   }
 }
@@ -391,11 +425,13 @@ function hideUndoToast() {
     }
     undoToast.classList.remove('fade-in');
     undoToast.classList.add('fade-out');
-    // Set a timeout to add 'hidden' after the fade-out animation completes
-    setTimeout(() => {
+    
+    const onAnimationEnd = () => {
         undoToast.classList.add('hidden');
         onUndo = null;
-    }, 300); // Duration should match the CSS animation
+        undoToast.removeEventListener('animationend', onAnimationEnd);
+    };
+    undoToast.addEventListener('animationend', onAnimationEnd);
 }
 
 export function showUndoToast(message: string, undoCallback: () => Promise<void>) {
@@ -677,23 +713,15 @@ function hideUpgradeModal() {
 
 // --- AI Chatbot Logic ---
 export function toggleChatbot(forceOpen?: boolean) {
-    const isCurrentlyOpen = !chatbotWidget.classList.contains('hidden');
-    const shouldOpen = forceOpen === true || (forceOpen === undefined && !isCurrentlyOpen);
+    const isCurrentlyHidden = chatbotWidget.classList.contains('hidden');
+    const shouldOpen = forceOpen === true || (forceOpen === undefined && isCurrentlyHidden);
 
-    if (shouldOpen && !isCurrentlyOpen) {
+    if (shouldOpen) {
         openChatbotButton.classList.add('hidden');
-        chatbotWidget.classList.remove('hidden');
-        chatbotWidget.classList.remove('animate-out');
-        chatbotWidget.classList.add('animate-in');
-        chatbotWidget.addEventListener('animationend', () => chatbotInput.focus(), { once: true });
-    } else if (!shouldOpen && isCurrentlyOpen) {
-        chatbotWidget.classList.remove('animate-in');
-        chatbotWidget.classList.add('animate-out');
-        chatbotWidget.addEventListener('animationend', () => {
-            chatbotWidget.classList.add('hidden');
-            openChatbotButton.classList.remove('hidden');
-            openChatbotButton.focus();
-        }, { once: true });
+        openModal(chatbotWidget);
+    } else {
+        closeModal(chatbotWidget);
+        openChatbotButton.classList.remove('hidden');
     }
 }
 
@@ -726,6 +754,56 @@ function showLoginScreen() {
         loginContainer.classList.add('fade-in');
         emailInput.focus();
     }, { once: true });
+}
+
+// FIX: Create a dedicated event handler for triggering AI analysis.
+async function onAssessButtonClick() {
+    const selectedRisks = Array.from(document.querySelectorAll('.risk-toggle:checked')).map(
+        (el) => (el as HTMLInputElement).value
+    );
+
+    const context = {
+        session: state.session,
+        currentUserPlan: state.currentUserPlan,
+        prompt: promptInput.value,
+        url: urlInput.value,
+        geoInputs: {
+            latitude: parseFloat(latInput.value || '0'),
+            longitude: parseFloat(lngInput.value || '0'),
+            elevation: parseFloat(elevationInput.value || '0'),
+            proximityToHazard: parseFloat(proximityInput.value || '0'),
+        },
+        selectedRisks,
+        imageBase64: state.imageBase64,
+        imageMimeType: state.imageMimeType,
+        currentUserRole: state.currentUserRole,
+    };
+
+    const setters = {
+        setLoaderVisible: (visible: boolean) => loader.classList.toggle('hidden', !visible),
+        setDashboardStatus: (status: string, color = '') => {
+            systemStatusValue.textContent = status;
+            systemStatusValue.style.color = color;
+        },
+        setMapQuery: (location: string | null | undefined) => renderMap(location),
+        setAssessmentResult: (html: string) => { resultDiv.innerHTML = html; },
+        setCurrentRisks: (risks: Risk[]) => {
+            state.currentRisks = risks;
+            renderRiskRegister(risks);
+        },
+        updateDashboard: updateDashboardStats,
+        setCurrentUserPlan: (plan: UserPlan | null) => {
+            state.currentUserPlan = plan;
+            updateFeatureAccess();
+        },
+        applyRole,
+        showUpgradeModal,
+        setLastAssessmentContext: (contextValue: { prompt: string; url: string; timestamp: string } | null) => {
+            state.lastAssessmentContext = contextValue;
+        },
+    };
+
+    await triggerAIAnalysis(context, setters);
 }
 
 
@@ -899,8 +977,10 @@ async function main() {
     reader.readAsDataURL(file);
   });
 
-  assessButton.addEventListener('click', triggerAIAnalysis);
-  exportCsvButton.addEventListener('click', exportToCSV);
+  // FIX: Wrap triggerAIAnalysis in a handler that provides the correct arguments.
+  assessButton.addEventListener('click', onAssessButtonClick);
+  // FIX: Wrap exportToCSV in a handler that provides the correct arguments from the current state.
+  exportCsvButton.addEventListener('click', () => exportToCSV(state.currentRisks, state.lastAssessmentContext));
   exportReportButton.addEventListener('click', () => {
     if (!currentUserPlan?.is_premium) showUpgradeModal();
     else alert('Premium Feature: Report export functionality is coming soon!');
@@ -910,11 +990,40 @@ async function main() {
   upgradeFromNoticeButton.addEventListener('click', showUpgradeModal);
   closeUpgradeModalButton.addEventListener('click', hideUpgradeModal);
   closeSuccessModalButton.addEventListener('click', hideUpgradeModal);
-  checkoutButton.addEventListener('click', handleUpgrade);
+  // FIX: Wrap handleUpgrade in an async handler that provides the user ID and handles UI updates.
+  checkoutButton.addEventListener('click', async () => {
+    if (state.session?.user.id) {
+        checkoutButton.disabled = true;
+        checkoutButton.innerHTML = `<div class="spinner small"></div> Upgrading...`;
+        const success = await handleUpgrade(state.session.user.id);
+        if (success) {
+            upgradeViewMain.classList.add('hidden');
+            upgradeViewSuccess.classList.remove('hidden');
+            // Refresh user data to reflect the upgrade
+            const userData = await userAuth.getUserData(state.session.user.id);
+            if (userData) {
+                state.currentUserPlan = userData.plan;
+                updateFeatureAccess();
+            }
+        } else {
+            alert('There was a problem processing your upgrade. Please try again.');
+        }
+        checkoutButton.disabled = false;
+        checkoutButton.innerHTML = 'Complete Purchase';
+    }
+  });
   
   openChatbotButton.addEventListener('click', () => toggleChatbot());
   closeChatbotButton.addEventListener('click', () => toggleChatbot());
-  chatbotInputForm.addEventListener('submit', handleChatSubmit);
+  // FIX: Wrap handleChatSubmit in a handler that prevents default form submission and provides the correct arguments.
+  chatbotInputForm.addEventListener('submit', (e: Event) => {
+    e.preventDefault();
+    const userMessage = chatbotInput.value.trim();
+    if (userMessage && state.chat) {
+        handleChatSubmit(userMessage, state.chat, chatbotMessages, chatbotTypingIndicator);
+        chatbotInput.value = '';
+    }
+  });
 
   newAssessmentButton.addEventListener('click', showAssessmentForm);
   closeAssessmentFormButton.addEventListener('click', hideAssessmentForm);
